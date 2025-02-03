@@ -22,6 +22,27 @@ chmod +x "$MINER_FILE"
 # Meminta input dari user
 read -p "Masukkan alamat wallet Anda: " WALLET
 read -p "Masukkan nama worker: " WORKER
+
+# Menampilkan daftar pool
+echo "Pilih pool yang ingin digunakan:"
+echo "1. pool-a.yatespool.com:31588"
+echo "2. pool-b.yatespool.com:32488"
+read -p "Masukkan nomor pool (1/2): " POOL_CHOICE
+
+# Validasi input pool
+while [[ "$POOL_CHOICE" != "1" && "$POOL_CHOICE" != "2" ]]; do
+    echo "Pilihan tidak valid. Silakan masukkan 1 atau 2."
+    read -p "Masukkan nomor pool (1/2): " POOL_CHOICE
+done
+
+# Menentukan alamat pool berdasarkan pilihan
+if [[ "$POOL_CHOICE" == "1" ]]; then
+    POOL="pool-a.yatespool.com:31588"
+elif [[ "$POOL_CHOICE" == "2" ]]; then
+    POOL="pool-b.yatespool.com:32488"
+fi
+
+# Pilihan penggunaan CPU
 read -p "Batasi jumlah CPU? (y/n): " LIMIT_CPU
 
 CPU_DEVICES=""
@@ -33,4 +54,4 @@ if [[ "$LIMIT_CPU" == "y" || "$LIMIT_CPU" == "Y" ]]; then
 fi
 
 # Jalankan miner dengan parameter yang telah disusun
-./$MINER_FILE --pool stratum+tcp://$WALLET.$WORKER@pool-core-testnet.inichain.com:32672 $CPU_DEVICES
+./$MINER_FILE --pool stratum+tcp://$WALLET.$WORKER@$POOL $CPU_DEVICES
